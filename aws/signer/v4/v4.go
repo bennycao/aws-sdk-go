@@ -55,7 +55,6 @@
 package v4
 
 import (
-	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -733,29 +732,12 @@ func stripExcessSpaces(headerVals []string) []string {
 			continue
 		}
 
-		buf := []byte(trimmed)
-		for idx > -1 {
-			stripToIdx := -1
-			for j := idx + 1; j < len(buf); j++ {
-				if buf[j] != ' ' {
-					buf = append(buf[:idx+1], buf[j:]...)
-					stripToIdx = j - idx - 1
-					break
-				}
-			}
-
-			if stripToIdx >= 0 {
-				// Find next double space
-				idx = bytes.Index(buf[stripToIdx:], doubleSpaceBytes)
-				if idx >= 0 {
-					idx += stripToIdx
-				}
-			} else {
-				idx = -1
-			}
-		}
-
-		vals[i] = string(buf)
+		vals[i] = stripDblSpaces(trimmed)
 	}
 	return vals
+}
+
+// recursively replace dblspaces to single space
+func stripDblSpaces(val string) string {
+	return strings.Join(strings.Fields(val), " ")
 }
