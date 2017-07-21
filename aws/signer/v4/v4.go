@@ -737,7 +737,7 @@ func stripExcessSpaces(headerVals []string) []string {
 	return vals
 }
 
-// recursively replace dblspaces to single space
+// replace dblspaces to single space
 func stripDblSpaces(val string) string {
 	return strings.Join(strings.Fields(val), " ")
 }
